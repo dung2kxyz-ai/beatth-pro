@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeatThợ - Trợ Lý Nhạc Sĩ AI</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #E0E0E0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .header {
+            font-size: 28px;
+            font-weight: bold;
+            color: #FF9F1C;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+        #input-section {
+            width: 100%;
+            max-width: 540px;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 90px;
+            background: #1E1E1E;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: white;
+            padding: 15px;
+            font-size: 15px;
+            outline: none;
+            resize: none;
+            box-sizing: border-box;
+        }
+        textarea::placeholder {
+            color: #888;
+        }
+        .controls-container {
+            width: 100%;
+            max-width: 540px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        .control-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #1E1E1E;
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: 1px solid #333;
+        }
+        .control-label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #aaa;
+            white-space: nowrap;
+            margin-right: 15px;
+        }
+        .control-select {
+            background: #2A2A2A;
+            color: white;
+            border: 1px solid #555;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            outline: none;
+            max-width: 260px;
+        }
+        #btnCreate {
+            background-color: #FF9F1C;
+            color: #121212;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 16px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 540px;
+            transition: all 0.2s;
+        }
+        #btnCreate:hover {
+            background-color: #e38d17;
+        }
+        #btnCreate:disabled {
+            background-color: #444;
+            color: #888;
+            cursor: not-allowed;
+        }
+        #lyricOutput {
+            white-space: pre-wrap;
+            background: #1a1a1a;
+            color: #fff;
+            padding: 25px;
+            margin-top: 30px;
+            border-radius: 8px;
+            border: 1px solid #FF9F1C;
+            font-size: 15px;
+            width: 100%;
+            max-width: 540px;
+            display: none;
+            line-height: 1.6;
+            box-sizing: border-box;
+        }
+        #btnCopyToSuno {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 540px;
+            margin-top: 20px;
+            display: none;
+            transition: all 0.2s;
+        }
+        #btnCopyToSuno:hover {
+            background-color: #45a049;
+        }
+        #actionStatus {
+            color: #4CAF50;
+            margin-top: 15px;
+            font-style: italic;
+            display: none;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">🎧 Trợ Lý BeatThợ</div>
+
+    <div class="controls-container">
+        <div class="control-row">
+            <label class="control-label">⏱️ Thời lượng</label>
+            <select id="durationSelect" class="control-select">
+                <option value="Đoạn ngắn (15 giây)">Đoạn ngắn (15 giây)</option>
+                <option value="1 phút">1 phút</option>
+                <option value="Nguyên bài (3 phút)">Nguyên bài (3 phút)</option>
+            </select>
+        </div>
+        <div class="control-row">
+            <label class="control-label">🎤 Giọng hát</label>
+            <select id="voiceSelect" class="control-select">
+                <option value="Tự động chọn theo thể loại">Tự động chọn theo thể loại</option>
+                <option value="Nam trầm ấm, tự sự">Nam trầm ấm, tự sự</option>
+                <option value="Nữ cao vút, cảm xúc">Nữ cao vút, cảm xúc</option>
+                <option value="Giọng rap nam khàn, mạnh mẽ">Giọng rap nam khàn, mạnh mẽ</option>
+            </select>
+        </div>
+        <div class="control-row">
+            <label class="control-label">🎵 Thể loại nhạc</label>
+            <select id="genreSelect" class="control-select">
+                <option value="Pop Ballad buồn, da diết">Pop Ballad buồn, da diết</option>
+                <option value="Rap / Hip-hop bụi bặm, đường phố">Rap / Hip-hop bụi bặm, đường phố</option>
+                <option value="EDM / House sôi động, bùng nổ">EDM / House sôi động, bùng nổ</option>
+                <option value="R&B ngọt ngào, lãng mạn">R&B ngọt ngào, lãng mạn</option>
+                <option value="Rock mạnh mẽ, hào hùng">Rock mạnh mẽ, hào hùng</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="input-section">
+        <textarea id="ideaInput" placeholder="Nhập ý tưởng bài hát của bạn ở đây..."></textarea>
+    </div>
+
+    <button id="btnCreate">SÁNG TÁC LỜI BÀI HÁT</button>
+
+    <div id="lyricOutput"></div>
+
+    <button id="btnCopyToSuno">📋 SAO CHÉP LỜI & MỞ SUNO TẠO NHẠC</button>
+    <div id="actionStatus"></div>
+
+    <script>
+        const ideaInput = document.getElementById('ideaInput');
+        const btnCreate = document.getElementById('btnCreate');
+        const lyricBox = document.getElementById('lyricOutput');
+        
+        const btnCopyToSuno = document.getElementById('btnCopyToSuno');
+        const actionStatus = document.getElementById('actionStatus');
+        let currentLyrics = ""; 
+
+        btnCreate.addEventListener('click', async function() {
+            if(ideaInput.value.trim() === '') {
+                alert("Ê thợ! Bạn phải nhập ý tưởng bài hát vào ô trống chứ!");
+                return; 
+            }
+
+            btnCreate.innerText = "⏳ Đang vắt óc sáng tác...";
+            btnCreate.disabled = true;
+            lyricBox.style.display = 'none'; 
+            btnCopyToSuno.style.display = 'none';
+            actionStatus.style.display = 'none';
+
+            try {
+                const response = await fetch('/generate-beat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        idea: ideaInput.value,
+                        duration: document.getElementById('durationSelect').value,
+                        genre: document.getElementById('genreSelect').value,
+                        voice: document.getElementById('voiceSelect').value
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    lyricBox.innerText = data.lyrics;
+                    lyricBox.style.display = 'block';
+                    currentLyrics = data.lyrics;
+                    btnCopyToSuno.style.display = 'block';
+                } else {
+                    alert("❌ Lỗi từ não AI: " + data.message);
+                }
+            } catch (error) {
+                alert("❌ Mất kết nối tới máy chủ.");
+            } finally {
+                btnCreate.innerText = "SÁNG TÁC LỜI BÀI HÁT";
+                btnCreate.disabled = false;
+            }
+        });
+
+        btnCopyToSuno.addEventListener('click', async function() {
+            try {
+                await navigator.clipboard.writeText(currentLyrics);
+                actionStatus.style.display = 'block';
+                actionStatus.style.color = '#4CAF50';
+                actionStatus.innerText = "✅ Đã copy xong! Đang mở xưởng nhạc Suno...";
+                
+                setTimeout(() => {
+                    window.open('https://suno.com/create', '_blank');
+                    actionStatus.innerText = "👉 Hãy dán (Ctrl+V) vào ô Custom Mode trên Suno nhé!";
+                }, 1500);
+            } catch (err) {
+                actionStatus.style.display = 'block';
+                actionStatus.style.color = '#FF9F1C';
+                actionStatus.innerText = "⚠️ Trình duyệt chặn tự động copy, hãy bôi đen thủ công nhé!";
+            }
+        });
+    </script>
+</body>
+</html>

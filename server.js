@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.static(__dirname));
 
 // Đặt trực tiếp API Key vào đây để chạy ổn định tuyệt đối
-const genAI = new GoogleGenerativeAI("AIzaSyAQ.Ab8RN6JgxHIKWDy1i_2T2wO44W1u8bVTVYLuZPXSm7GwZ3GcXg");
+const genAI = new GoogleGenerativeAI("AIzaSy...AQ.Ab8RN6Ik_A5c6A8dv1kYUC0mJAO2Drxa4AF_9__QKfksngHJTg");
 
 app.post('/generate-beat', async (req, res) => {
     try {

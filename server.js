@@ -16,7 +16,7 @@ app.post('/generate-beat', async (req, res) => {
         const { idea, duration, genre, voice } = req.body;
         console.log("🛠️ Đang viết lời cho yêu cầu:", { idea, duration, genre, voice });
 
-        const model = genAI.getGenerativeModel({ model: "gemini-3.6-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         const prompt = `Bạn là một nhạc sĩ chuyên nghiệp. Hãy viết lời bài hát dựa trên các yêu cầu sau:
         - Ý tưởng chủ đạo: ${idea}
